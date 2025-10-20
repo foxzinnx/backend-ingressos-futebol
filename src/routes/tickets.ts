@@ -1,11 +1,12 @@
 import express from 'express';
 import { autenticateJWT } from '../middlewares/auth';
-import { createMatch, listMatches, listSectors, getAvailability, buyTicket } from '../controllers/ticketController';
+import { createMatch, listMatches, listSectors, getAvailability, buyTicket, getMatchById } from '../controllers/ticketController';
 
 const router = express.Router();
 
 // Rotas públicas
 router.get('/matches', listMatches);
+router.get('/matches/:matchId', getMatchById);
 router.get('/sectors', listSectors);
 // router.get('/availability/:matchId', getAvailability); Rota pra mostrar se um setor está disponível
 

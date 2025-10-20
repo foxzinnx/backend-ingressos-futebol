@@ -17,19 +17,32 @@ model User {
 }
 
 model Sector {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  capacity  Int
-  tickets   Ticket[]
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  capacity     Int
+  tickets      Ticket[]
+  matchSectors MatchSector[]
 }
 
 model Match {
-  id        Int      @id @default(autoincrement())
-  date      DateTime
-  location  String   @default("Arena Zico")
-  teamA     String
-  teamB     String
-  tickets   Ticket[]
+  id           Int            @id @default(autoincrement())
+  date         DateTime
+  location     String         @default("Arena Zico")
+  teamA        String
+  teamB        String
+  tickets      Ticket[]
+  matchSectors MatchSector[]
+}
+
+model MatchSector {
+  id        Int     @id @default(autoincrement())
+  matchId   Int
+  sectorId  Int
+  price     Decimal @db.Decimal(10, 2)
+  match     Match   @relation(fields: [matchId], references: [id])
+  sector    Sector  @relation(fields: [sectorId], references: [id])
+
+  @@unique([matchId, sectorId])
 }
 
 model Ticket {
