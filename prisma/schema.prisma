@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  tickets   Ticket[]
+}
+
+model Sector {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  capacity  Int
+  tickets   Ticket[]
+}
+
+model Match {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  location  String   @default("Arena Zico")
+  teamA     String
+  teamB     String
+  tickets   Ticket[]
+}
+
+model Ticket {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  sectorId    Int
+  matchId     Int
+  purchasedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+  sector      Sector   @relation(fields: [sectorId], references: [id])
+  match       Match    @relation(fields: [matchId], references: [id])
+}
